@@ -46,14 +46,33 @@
 
     footer {
       color: var(--text);
+      text-decoration: none;
     }
 
     footer a {
-      color: var(--text);
+      color: inherit;
+      text-decoration: inherit;
     }
 
     footer a:hover {
-      color: var(--border);
+      text-decoration: underline;
+    }
+
+    p.error {
+      padding: 0.2em;
+      text-align: center;
+      opacity: 1;
+      animation: fadeout 2s;
+      animation-fill-mode: forwards;
+    };
+
+    p .startfade {
+      opacity: 0;
+    }
+
+    @keyframes fadeout {
+      from {opacity: 1;}
+      to {opacity: 0;}
     }
   </style>
 
@@ -66,20 +85,55 @@
   <input href="#" type="text" id="word-one" autocomplete="off" placeholder="word one">
   <input href="#" type="text" id="word-two" autocomplete="off" placeholder="word two"><br>
 
-  <textarea id="content-box"></textarea><br><br>
+  <textarea id="content-box" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea><br><br>
   <button type="button" id="translate">translate</button>
-  <button type="button" id="untranslate">untranslate</button>
+  <button type="button" id="untranslate">untranslate</button><br><br>
+  <div id="error-box"></div>
   <section>
   <footer>
-    <em><p>Made with &lt;3 by <a href="https://github.com/reeceyang">Reece</a>. View <a href="#">source</a>.</em>
+    <em><p>Made with &lt;3 by <a href="https://github.com/reeceyang">Reece</a>. View <a href="https://github.com/reeceyang/two-word-translator">source</a>.</em>
   </footer>
 </body>
 
 <script>
+function areValidWords(wordOne, wordTwo) {
+  if (wordOne == "" || wordTwo == "") {
+    return "error: words cannot be empty!";
+  }
+  if (/\s/g.test(wordOne) || /\s/g.test(wordTwo)) {
+    return "error: words cannot contain whitespace!";
+  }
+  if (wordOne == wordTwo) {
+    return "error: words cannot be the same!";
+  }
+  if (!/^[ -~]+$/.test(wordOne) || !/^[ -~]+$/.test(wordTwo)) {
+    return "error: words cannot contain non-ASCII characters!";
+  }
+  return true;
+}
+
+function addError(error) {
+  var defNode = document.createElement("p");
+  defNode.appendChild(document.createTextNode(error));
+  defNode.classList.add("startfade");
+  defNode.classList.add("error");
+  defNode.addEventListener("animationend", () => {
+    defNode.parentNode.removeChild(defNode);
+  });
+  document.getElementById("error-box").appendChild(defNode);
+}
+
 document.getElementById("translate").addEventListener("click", function () {
   initial = document.getElementById("content-box").value;
-  wordOne = document.getElementById("word-one").value;
-  wordTwo = document.getElementById("word-two").value;
+  wordOne = document.getElementById("word-one").value.trim();
+  wordTwo = document.getElementById("word-two").value.trim();
+  document.getElementById("word-one").value = wordOne;
+  document.getElementById("word-two").value = wordTwo;
+  isValid = areValidWords(wordOne, wordTwo);
+  if (isValid != true) {
+    addError(isValid);
+    return;
+  }
   output = wordOne + " " + wordTwo;
   for (var i = 0; i < initial.length; i++) {
     charCode = initial[i].charCodeAt(0).toString(2).padStart(7, "0");
@@ -95,17 +149,27 @@ document.getElementById("translate").addEventListener("click", function () {
 });
 
 document.getElementById("untranslate").addEventListener("click", function () {
-  tokens = document.getElementById("content-box").value.split(" ");
+  initial = document.getElementById("content-box").value.trim();
+  if (!/^[ -~]*$/.test(initial)) {
+    addError("error: input contains invalid (non-ASCII or whitespace) characters!");
+    return;
+  }
+  tokens = initial.split(" ");
   if (tokens.length < 2) {
-    console.log("error: input too short!");
+    addError("error: input is too short!");
     return;
   }
   if (tokens.length % 7 != 2) {
-    console.log("error: input length is wrong!")
+    addError("error: input length is invalid!")
     return;
   }
   wordOne = tokens[0];
   wordTwo = tokens[1];
+  isValid = areValidWords(wordOne, wordTwo);
+  if (isValid != true) {
+    addError(isValid);
+    return;
+  }
   document.getElementById("word-one").value = wordOne;
   document.getElementById("word-two").value = wordTwo;
   output = "";
@@ -116,7 +180,7 @@ document.getElementById("untranslate").addEventListener("click", function () {
     } else if (tokens[i] == wordTwo) {
       block += "1";
     } else {
-      console.log("error: " + tokens[i] + " not in dictionary!");
+      addError("error: \"" + tokens[i] + "\" not in dictionary!");
       return;
     }
     if (block.length == 7) {
