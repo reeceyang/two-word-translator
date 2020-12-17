@@ -1,0 +1,57 @@
+:root {
+  --background: #f8f8f8;
+  --background-darker: #eee;
+  --border: #ccc;
+  --hover: #ddd;
+  --text: black;
+}
+
+.dark {
+  --background: #242424;
+  --background-darker: #363636;
+  --hover: #484848;
+  --text: #ddd;
+  --border: #303030;
+}
+
+* {
+  transition: 0.25s;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+  margin: 0;
+  overflow: hidden;
+}
+
+a {
+  color: #457b9d;
+}
+
+input, textarea, button {
+  background-color: var(--background-darker);
+  border: hidden;
+  border-bottom: solid var(--hover);
+  color: inherit;
+  outline: none;
+  font: inherit;
+  padding: 0.2em;
+}
+
+input:focus, textarea:focus {
+  background-color: var(--hover);
+}
+
+textarea {
+  height: 5em;
+}
+
+button:hover {
+  background-color: var(--hover);
+  cursor: pointer;
+}
+
+button:active {
+  transform: translateY(0.2em);
+}

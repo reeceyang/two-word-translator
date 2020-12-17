@@ -1,0 +1,131 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>two-word language translator</title>
+  <meta name="description" content="two-word language translator">
+  <meta name="author" content="Reece Yang">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="henry.css">
+  <style>
+    /* https://coolors.co/8ecae6-219ebc-023047-ffb703-fb8500 */
+    :root {
+      --background: #219EBC;
+      --background-darker: #eee;
+      --border: #ccc;
+      --hover: #ddd;
+      --text: black;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Crimson Text', serif;
+    }
+
+    section {
+      margin: 20rem auto;
+      max-width: 800px;
+      text-align: center;
+      font-size: 14pt;
+    }
+
+    textarea {
+      width: 60%;
+      height: 10em;
+    }
+
+    input {
+      margin: 2rem auto;
+    }
+
+    footer {
+      color: var(--text);
+    }
+
+    footer a {
+      color: var(--text);
+    }
+
+    footer a:hover {
+      color: var(--border);
+    }
+  </style>
+
+</head>
+
+<body>
+  <section>
+  <h1>two-word language translator</h1>
+
+  <input href="#" type="text" id="word-one" autocomplete="off" placeholder="word one">
+  <input href="#" type="text" id="word-two" autocomplete="off" placeholder="word two"><br>
+
+  <textarea id="content-box"></textarea><br><br>
+  <button type="button" id="translate">translate</button>
+  <button type="button" id="untranslate">untranslate</button>
+  <section>
+  <footer>
+    <em><p>Made with &lt;3 by <a href="https://github.com/reeceyang">Reece</a>. View <a href="#">source</a>.</em>
+  </footer>
+</body>
+
+<script>
+document.getElementById("translate").addEventListener("click", function () {
+  initial = document.getElementById("content-box").value;
+  wordOne = document.getElementById("word-one").value;
+  wordTwo = document.getElementById("word-two").value;
+  output = wordOne + " " + wordTwo;
+  for (var i = 0; i < initial.length; i++) {
+    charCode = initial[i].charCodeAt(0).toString(2).padStart(7, "0");
+    for (var j = 0; j < 7; j++) {
+      if (charCode[j] == "0") {
+        output += " " + wordOne;
+      } else {
+        output += " " + wordTwo;
+      }
+    }
+  }
+  document.getElementById("content-box").value = output;
+});
+
+document.getElementById("untranslate").addEventListener("click", function () {
+  tokens = document.getElementById("content-box").value.split(" ");
+  if (tokens.length < 2) {
+    console.log("error: input too short!");
+    return;
+  }
+  if (tokens.length % 7 != 2) {
+    console.log("error: input length is wrong!")
+    return;
+  }
+  wordOne = tokens[0];
+  wordTwo = tokens[1];
+  document.getElementById("word-one").value = wordOne;
+  document.getElementById("word-two").value = wordTwo;
+  output = "";
+  block = ""
+  for (var i = 2; i < tokens.length; i++) {
+    if (tokens[i] == wordOne) {
+      block += "0";
+    } else if (tokens[i] == wordTwo) {
+      block += "1";
+    } else {
+      console.log("error: " + tokens[i] + " not in dictionary!");
+      return;
+    }
+    if (block.length == 7) {
+      output += String.fromCharCode(parseInt(block, 2));
+      block = "";
+    }
+  }
+  document.getElementById("content-box").value = output;
+});
+</script>
+
+</html>
