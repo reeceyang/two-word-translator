@@ -29,7 +29,7 @@
     }
 
     section {
-      margin: 20rem auto;
+      margin: 15rem auto;
       max-width: 800px;
       text-align: center;
       font-size: 14pt;
@@ -74,6 +74,10 @@
       from {opacity: 1;}
       to {opacity: 0;}
     }
+
+    #error-box {
+      max-height: 2em;
+    }
   </style>
 
 </head>
@@ -87,15 +91,21 @@
 
   <textarea id="content-box" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea><br><br>
   <button type="button" id="translate">translate</button>
-  <button type="button" id="untranslate">untranslate</button><br><br>
-  <div id="error-box"></div>
+  <button type="button" id="untranslate">untranslate</button>
+  <div id="error-box"><br><br></div>
   <section>
   <footer>
-    <em><p>Made with &lt;3 by <a href="https://github.com/reeceyang">Reece</a>. View <a href="https://github.com/reeceyang/two-word-translator">source</a>.</em>
+    <a id="share-link" href="#">share</a>
+    <em><p>made with &lt;3 by <a href="https://github.com/reeceyang">reece</a>. view <a href="https://github.com/reeceyang/two-word-translator">source</a>.</em>
   </footer>
 </body>
 
 <script>
+var searchParams = new URLSearchParams(window.location.search);
+document.getElementById("word-one").value = searchParams.get("one");
+document.getElementById("word-two").value = searchParams.get("two");
+document.getElementById("content-box").value = searchParams.get("input");
+
 function areValidWords(wordOne, wordTwo) {
   if (wordOne == "" || wordTwo == "") {
     return "error: words cannot be empty!";
@@ -123,7 +133,7 @@ function addError(error) {
   document.getElementById("error-box").appendChild(defNode);
 }
 
-document.getElementById("translate").addEventListener("click", function () {
+document.getElementById("translate").addEventListener("click", () => {
   initial = document.getElementById("content-box").value;
   wordOne = document.getElementById("word-one").value.trim();
   wordTwo = document.getElementById("word-two").value.trim();
@@ -148,7 +158,7 @@ document.getElementById("translate").addEventListener("click", function () {
   document.getElementById("content-box").value = output;
 });
 
-document.getElementById("untranslate").addEventListener("click", function () {
+document.getElementById("untranslate").addEventListener("click", () => {
   initial = document.getElementById("content-box").value.trim();
   if (!/^[ -~]*$/.test(initial)) {
     addError("error: input contains invalid (non-ASCII or whitespace) characters!");
@@ -189,6 +199,23 @@ document.getElementById("untranslate").addEventListener("click", function () {
     }
   }
   document.getElementById("content-box").value = output;
+});
+
+document.getElementById("share-link").addEventListener("click", () => {
+  var url = new URL(document.location.href);
+  url.searchParams.set("one", document.getElementById("word-one").value);
+  url.searchParams.set("two", document.getElementById("word-two").value);
+  url.searchParams.set("input", document.getElementById("content-box").value);
+  document.location.href = url;
+
+  const textArea = document.createElement('textarea');
+  textArea.textContent = url;
+  document.body.append(textArea);
+  textArea.select();
+  document.execCommand("copy");
+  textArea.parentNode.removeChild(textArea);
+
+  addError("copied link to clipboard!");
 });
 </script>
 
