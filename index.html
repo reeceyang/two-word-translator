@@ -52,6 +52,7 @@
     footer a {
       color: inherit;
       text-decoration: inherit;
+      cursor: pointer;
     }
 
     footer a:hover {
@@ -95,7 +96,7 @@
   <div id="error-box"><br><br></div>
   <section>
   <footer>
-    <a id="share-link" href="#">share</a>
+    <a id="share-link">share</a>
     <em><p>made with &lt;3 by <a href="https://github.com/reeceyang">reece</a>. view <a href="https://github.com/reeceyang/two-word-translator">source</a>.</em>
   </footer>
 </body>
@@ -206,7 +207,7 @@ document.getElementById("share-link").addEventListener("click", () => {
   url.searchParams.set("one", document.getElementById("word-one").value);
   url.searchParams.set("two", document.getElementById("word-two").value);
   url.searchParams.set("input", document.getElementById("content-box").value);
-  document.location.href = url;
+  //document.location.href = url;
 
   const textArea = document.createElement('textarea');
   textArea.textContent = url;
