@@ -28,11 +28,18 @@
       font-family: 'Crimson Text', serif;
     }
 
-    section {
-      margin: 15rem auto;
-      max-width: 800px;
+    body {
+      max-width: 45em;
+      margin: auto;
       text-align: center;
       font-size: 14pt;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+
+    section {
+      margin-top: 15rem;
     }
 
     textarea {
@@ -47,6 +54,7 @@
     footer {
       color: var(--text);
       text-decoration: none;
+      margin-bottom: 1em;
     }
 
     footer a {
@@ -85,16 +93,17 @@
 
 <body>
   <section>
-  <h1>two-word language translator</h1>
+    <h1>two-word language translator</h1>
 
-  <input href="#" type="text" id="word-one" autocomplete="off" placeholder="word one">
-  <input href="#" type="text" id="word-two" autocomplete="off" placeholder="word two"><br>
+    <input href="#" type="text" id="word-one" autocomplete="off" placeholder="word one">
+    <input href="#" type="text" id="word-two" autocomplete="off" placeholder="word two"><br>
 
-  <textarea id="content-box" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea><br><br>
-  <button type="button" id="translate">translate</button>
-  <button type="button" id="untranslate">untranslate</button>
-  <div id="error-box"><br><br></div>
-  <section>
+    <textarea id="content-box" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea><br><br>
+    <button type="button" id="translate">translate</button>
+    <button type="button" id="untranslate">untranslate</button>
+    <div id="error-box"><br><br></div>
+  </section>
+
   <footer>
     <a id="share-link">share</a>
     <em><p>made with &lt;3 by <a href="https://github.com/reeceyang">reece</a>. view <a href="https://github.com/reeceyang/two-word-translator">source</a>.</em>
