@@ -55,6 +55,7 @@
       color: var(--text);
       text-decoration: none;
       margin-bottom: 1em;
+      margin-top: 3em;
     }
 
     footer a {
@@ -85,7 +86,7 @@
     }
 
     #error-box {
-      max-height: 2em;
+      max-height: 1em;
     }
   </style>
 
@@ -101,7 +102,7 @@
     <textarea id="content-box" spellcheck="false" autocorrect="off" autocapitalize="off"></textarea><br><br>
     <button type="button" id="translate">translate</button>
     <button type="button" id="untranslate">untranslate</button>
-    <div id="error-box"><br><br></div>
+    <div id="error-box"><br></div>
   </section>
 
   <footer>
@@ -133,6 +134,7 @@ function areValidWords(wordOne, wordTwo) {
 }
 
 function addError(error) {
+  document.getElementById("error-box").innerHTML = "<br>";
   var defNode = document.createElement("p");
   defNode.appendChild(document.createTextNode(error));
   defNode.classList.add("startfade");
